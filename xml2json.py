@@ -10,6 +10,7 @@ parser.add_argument('--unsafe', action='store_true',
                     help='do not use defusedxml: only for known-safe XML!')
 parser.add_argument('infile', nargs='?', type=argparse.FileType('rt'),
                     default=sys.stdin)
+parser.add_argument('outfile')
 
 
 def xml_element_to_dict(elem):
@@ -35,9 +36,8 @@ def main(args):
     xml_parser = ElementTree.parse(args.infile)
     root = xml_parser.getroot()
 
-    json.dump(xml_element_to_dict(root), sys.stdout, indent=2)
-    print()
-
+    with open(args.outfile, "w") as f:
+        json.dump(xml_element_to_dict(root), f)
 
 if __name__ == '__main__':
     args = parser.parse_args()
